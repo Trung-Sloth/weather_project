@@ -207,4 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+// document.getElementById(formWeather).addEventListener("submit", (e)=>e.preventDefault());
+
 });

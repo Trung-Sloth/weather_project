@@ -13,7 +13,7 @@
 <body>
   <main class="{{ description }}">
     <section class="side-container">
-        <form method="POST">
+        <form method="POST" id="formWeather">
             {% csrf_token %}
             <button type="submit" class="search-button">
                 <div style="width: 25px;height: 25px;color: white;">
