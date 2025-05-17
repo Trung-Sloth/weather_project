@@ -5,6 +5,7 @@ name = "pypi"
 
 [scripts]
 weather_server = "python ./weather_project/manage.py runserver 0.0.0.0:80"
+dev = "python ./weather_project/manage.py runserver"
 
 [packages]
 xgboost = "*"
