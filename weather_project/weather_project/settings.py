@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-r_wkz#t)+==fb1!fgn-&vyxv_q1in#g5c^iy9h^z6yql31^_hi
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+CSRF_TRUSTED_ORIGINS=["weather-project-8tpy.onrender.com"]
 ALLOWED_HOSTS = ["weather-project-8tpy.onrender.com"]
 
 
