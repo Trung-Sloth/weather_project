@@ -198,15 +198,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (firebaseMarker) {
         map.removeLayer(firebaseMarker);
+        // Add previous position marker
+        var prevLat = firebaseMarker.getLatLng().lat;
+        var prevLng = firebaseMarker.getLatLng().lng;
+        prevFirebaseMarker = L.marker([prevLat, prevLng], { icon: prevPos })
+          .addTo(map)
       }
 
       firebaseMarker = L.marker([lat, lng], { icon: uavIcon })
         .addTo(map)
-        // .bindPopup("UAV")
-        .openPopup();
     }
   });
 
-// document.getElementById(formWeather).addEventListener("submit", (e)=>e.preventDefault());
+  // Marker for previous position
+  var prevPos = new L.Icon({
+    iconUrl: 'https://vectorified.com/images/red-dot-icon-8.png',
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -20],
+    shadowSize: [41, 41]
+  });
+  let prevFirebaseMarker = null;
 
 });
