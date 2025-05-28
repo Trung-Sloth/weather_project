@@ -213,8 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Marker for previous position
   var prevPos = new L.Icon({
     iconUrl: 'https://vectorified.com/images/red-dot-icon-8.png',
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
+    iconSize: [12, 12],
+    iconAnchor: [4, 4],
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
