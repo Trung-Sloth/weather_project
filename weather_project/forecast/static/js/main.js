@@ -11,14 +11,43 @@ document.addEventListener('popstate', () => {
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-  const map = L.map('map').setView([10.850324, 106.772186], 20);
+  var lastLat1 = 0, lastLng1 = 0, lastLat2 = 0, lastLng2 = 0, lastLat3 = 0, lastLng3 = 0;
+  var ref1 = db.ref("Toa-do-1");
+  var ref2 = db.ref("Toa-do-2");
+  var ref3 = db.ref("Toa-do-3");
+  let currentMarker1 = null, currentMarker2 = null, currentMarker3 = null;
+  var x1 = 0, x2 = 0, x3 = 0;
+  var y1 = 0, y2 = 0, y3 = 0;
 
-  //   L.tileLayer('https://api.maptiler.com/maps/openstreetmap/256/{z}/{x}/{y}.jpg?key=WxV6QKoeVDywcxuiW3su', // Map bth
-  //   { 
-  //     tileSize: 256,
-  //     zoomOffset: 0,
-  //     maxZoom: 22
-  //   }).addTo(map);
+  map.on('load', function () {
+    ref1.on("value", (snapshot) => {
+      lastLat1 = parseFloat(snapshot.val().lat);
+      lastLng1 = parseFloat(snapshot.val().lng);
+      console.log("Toa-do-1: " + lastLat1 + ", " + lastLng1);
+      lastMarker1 = L.marker([lastLat1, lastLng1], { icon: redIcon }).addTo(map);
+      console.log("Map loaded");
+    });
+    ref2.on("value", (snapshot) => {
+      lastLat2 = parseFloat(snapshot.val().lat);
+      lastLng2 = parseFloat(snapshot.val().lng);
+      console.log("Toa-do-2: " + lastLat2 + ", " + lastLng2);
+      lastMarker2 = L.marker([lastLat2, lastLng2], { icon: greenIcon }).addTo(map);
+    });
+    ref3.on("value", (snapshot) => {
+      lastLat3 = parseFloat(snapshot.val().lat);
+      lastLng3 = parseFloat(snapshot.val().lng);
+      console.log("Toa-do-3: " + lastLat3 + ", " + lastLng3);
+      lastMarker3 = L.marker([lastLat3, lastLng3], { icon: blueIcon }).addTo(map);
+    });
+  });
+
+  db.ref("Toa-do-hien-tai").on("value", (snapshot) => {
+    const data = snapshot.val();
+    const lat_x = data.lat_cur;
+    const lng_x = data.lng_cur;
+    map.setView([lat_x, lng_x], 20);
+  });
+  // const map = L.map('map').setView([10.850324, 106.772186], 20);
 
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //Map ve tinh
     {
@@ -51,47 +80,40 @@ document.addEventListener('popstate', () => {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-  
-  let currentMarker1 = null;
-  let currentMarker2 = null;
-  let currentMarker3 = null;
-  var n = 0;
-  var x1 = 0, x2 = 0, x3 = 0;
-  var y1 = 0, y2 = 0, y3 = 0;
 
   map.on('click', function (e) {
-    n = n + 1;
-    if (n % 3 == 1) {
+    markerTurn = markerTurn + 1;
+    if (markerTurn % 3 == 1) {
       const lat1 = e.latlng.lat.toFixed(6);
       const lng1 = e.latlng.lng.toFixed(6);
       x1 = lat1;
       y1 = lng1;
 
-      if ((n % 3 == 1) && (n > 3)) {
+      if ((markerTurn % 3 == 1) && (markerTurn > 3)) {
         map.removeLayer(currentMarker1);
       }
       currentMarker1 = L.marker([lat1, lng1], { icon: redIcon }).addTo(map);
     }
 
-    if (n % 3 == 2) {
+    if (markerTurn % 3 == 2) {
       const lat2 = e.latlng.lat.toFixed(6);
       const lng2 = e.latlng.lng.toFixed(6);
       x2 = lat2;
       y2 = lng2;
 
-      if ((n % 3 == 2) && (n > 3)) {
+      if ((markerTurn % 3 == 2) && (markerTurn > 3)) {
         map.removeLayer(currentMarker2);
       }
       currentMarker2 = L.marker([lat2, lng2], { icon: greenIcon }).addTo(map);
     }
 
-    if (n % 3 == 0) {
+    if (markerTurn % 3 == 0) {
       const lat3 = e.latlng.lat.toFixed(6);
       const lng3 = e.latlng.lng.toFixed(6);
       x3 = lat3;
       y3 = lng3;
 
-      if ((n % 3 == 0) && (n > 3)) {
+      if ((markerTurn % 3 == 0) && (markerTurn > 3)) {
         map.removeLayer(currentMarker3);
       }
       currentMarker3 = L.marker([lat3, lng3], { icon: blueIcon }).addTo(map);
@@ -137,7 +159,7 @@ document.addEventListener('popstate', () => {
   });
 
   confirmBtn.addEventListener('click', () => {
-    if (n != 0) {
+    if (markerTurn != 0) {
       document.getElementById('status1').innerText = `Vĩ độ 1=${x1}, Kinh độ 1=${y1}`;
       document.getElementById('status2').innerText = `Vĩ độ 2=${x2}, Kinh độ 2=${y2}`;
       document.getElementById('status3').innerText = `Vĩ độ 3=${x3}, Kinh độ 3=${y3}`;
@@ -162,25 +184,24 @@ document.addEventListener('popstate', () => {
     })
   });
 
-  deleteBtn.addEventListener('click', () => {
-    n = 0;
-    map.removeLayer(currentMarker1);
-    map.removeLayer(currentMarker2);
-    map.removeLayer(currentMarker3);
-    document.getElementById('status1').innerText = '';
-    document.getElementById('status2').innerText = '';
-    document.getElementById('status3').innerText = '';
-  });
-
-  const uavIcon = new L.Icon({
+  var uavIcon = new L.Icon({
     iconUrl: 'http://getdrawings.com/free-icon/uav-icon-62.png',
     iconSize: [45, 45],
-    iconAnchor: [20, 20],
+    iconAnchor: [22.5, 22.5],
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
-
   let firebaseMarker = null;
+
+  // Marker for previous position
+  var prevPos = new L.Icon({
+    iconUrl: 'https://vectorified.com/images/red-dot-icon-8.png',
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+    popupAnchor: [0, -20],
+    shadowSize: [41, 41]
+  });
+  let prevFirebaseMarker = null;
 
   db.ref("Toa-do-hien-tai").on("value", (snapshot) => {
     const data = snapshot.val();
@@ -196,20 +217,22 @@ document.addEventListener('popstate', () => {
         prevFirebaseMarker = L.marker([prevLat, prevLng], { icon: prevPos })
           .addTo(map)
       }
-
       firebaseMarker = L.marker([lat, lng], { icon: uavIcon })
         .addTo(map)
     }
   });
 
-  // Marker for previous position
-  var prevPos = new L.Icon({
-    iconUrl: 'https://vectorified.com/images/red-dot-icon-8.png',
-    iconSize: [12, 12],
-    iconAnchor: [4, 4],
-    popupAnchor: [0, -20],
-    shadowSize: [41, 41]
+  deleteBtn.addEventListener('click', () => {
+    markerTurn = 0;
+    map.removeLayer(lastMarker1);
+    map.removeLayer(lastMarker2);
+    map.removeLayer(lastMarker3);
+    map.removeLayer(currentMarker1);
+    map.removeLayer(currentMarker2);
+    map.removeLayer(currentMarker3);
+    document.getElementById('status1').innerText = '';
+    document.getElementById('status2').innerText = '';
+    document.getElementById('status3').innerText = '';
   });
-  let prevFirebaseMarker = null;
 
 });
