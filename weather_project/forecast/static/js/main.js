@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+  const map = L.map('map');
   var lastLat1 = 0, lastLng1 = 0, lastLat2 = 0, lastLng2 = 0, lastLat3 = 0, lastLng3 = 0;
   var ref1 = db.ref("Toa-do-1");
   var ref2 = db.ref("Toa-do-2");
