@@ -1,6 +1,6 @@
-document.addEventListener('popstate', () => {
-  if (window.location.pathname !== '/map') return;
-
+// document.addEventListener('popstate', () => {
+//   if (window.location.pathname !== '/map') return;
+document.addEventListener('DOMContentLoaded', () => {
   const firebaseConfig = {
     apiKey: "AIzaSyAmd8V46CLS11cyu1UnjqBwtcBUXybnyNA",
     authDomain: "map-1-b0eae.firebaseapp.com",
