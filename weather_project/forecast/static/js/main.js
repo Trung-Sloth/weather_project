@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const lng1 = e.latlng.lng.toFixed(6);
       x1 = lat1;
       y1 = lng1;
-
       if ((markerTurn % 3 == 1) && (markerTurn > 3)) {
         map.removeLayer(currentMarker1);
       }
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const lng2 = e.latlng.lng.toFixed(6);
       x2 = lat2;
       y2 = lng2;
-
       if ((markerTurn % 3 == 2) && (markerTurn > 3)) {
         map.removeLayer(currentMarker2);
       }
@@ -113,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const lng3 = e.latlng.lng.toFixed(6);
       x3 = lat3;
       y3 = lng3;
-
       if ((markerTurn % 3 == 0) && (markerTurn > 3)) {
         map.removeLayer(currentMarker3);
       }
@@ -187,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   var uavIcon = new L.Icon({
     iconUrl: 'http://getdrawings.com/free-icon/uav-icon-62.png',
-    iconSize: [45, 45],
-    iconAnchor: [22.5, 22.5],
+    iconSize: [50, 50],
+    iconAnchor: [25, 25],
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
@@ -197,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Marker for previous position
   var prevPos = new L.Icon({
     iconUrl: 'https://vectorified.com/images/red-dot-icon-8.png',
-    iconSize: [12, 12],
-    iconAnchor: [6, 6],
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
@@ -215,16 +212,86 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add previous position marker
         var prevLat = firebaseMarker.getLatLng().lat;
         var prevLng = firebaseMarker.getLatLng().lng;
+
         prevFirebaseMarker = L.marker([prevLat, prevLng], { icon: prevPos })
           .addTo(map)
       }
       firebaseMarker = L.marker([lat, lng], { icon: uavIcon })
         .addTo(map)
+      // Zoom out the marker size when zooming out
+      var lastZoom = 19;
+      var markerRatio = 100;
+
+      map.on('zoom', function () {
+        var currentZoom = map.getZoom();
+        // Set all Marker Ratio
+        if (currentZoom >= 15) {    // Maximum zoom out level
+          markerRatio = ((100 - (19 - currentZoom) * 10)) / 100;
+        }
+        else {
+          markerRatio = markerRatio;
+        }
+        // UAV icon
+        map.removeLayer(firebaseMarker);
+        uavIcon.options.iconSize = [50 * markerRatio, 50 * markerRatio];
+        uavIcon.options.iconAnchor = [25 * markerRatio, 25 * markerRatio];
+        firebaseMarker = L.marker([lat, lng], { icon: uavIcon })
+          .addTo(map)
+
+        // Position marker
+        //// Remove marker 1 (red)
+        if (markerTurn == 0) {
+          map.removeLayer(lastMarker1);     // previous marker
+        }
+        if (markerTurn != 0) {
+          map.removeLayer(currentMarker1);  // current marker
+        }
+        redIcon.options.iconSize = [25 * markerRatio, 41 * markerRatio];
+        redIcon.options.iconAnchor = [12 * markerRatio, 41 * markerRatio];
+        if (markerTurn == 0) {
+          lastMarker1 = L.marker([lastLat1, lastLng1], { icon: redIcon }).addTo(map);
+        }
+        if (markerTurn != 0) {
+          currentMarker1 = L.marker([x1, y1], { icon: redIcon }).addTo(map);
+        }
+        //// Remove marker 2 (green)
+        if (markerTurn == 0) {
+          map.removeLayer(lastMarker2);     // previous marker
+        }
+        if (markerTurn != 0) {
+          map.removeLayer(currentMarker2);  // current marker
+        }
+        greenIcon.options.iconSize = [25 * markerRatio, 41 * markerRatio];
+        greenIcon.options.iconAnchor = [12 * markerRatio, 41 * markerRatio];
+        if (markerTurn != 0) {
+          currentMarker2 = L.marker([x2, y2], { icon: greenIcon }).addTo(map);
+        }
+        if (markerTurn == 0) {
+          lastMarker2 = L.marker([lastLat2, lastLng2], { icon: greenIcon }).addTo(map);
+        }
+        //// Remove marker 3 (blue)
+        if (markerTurn == 0) {
+          map.removeLayer(lastMarker3);     // previous marker
+        }
+        if (markerTurn != 0) {
+          map.removeLayer(currentMarker3);  // current marker
+        }
+        blueIcon.options.iconSize = [25 * markerRatio, 41 * markerRatio];
+        blueIcon.options.iconAnchor = [12 * markerRatio, 41 * markerRatio];
+        if (markerTurn == 0) {
+          lastMarker3 = L.marker([lastLat3, lastLng3], { icon: blueIcon }).addTo(map);
+        }
+        if (markerTurn != 0) {
+          currentMarker3 = L.marker([x3, y3], { icon: blueIcon }).addTo(map);
+        }
+
+        lastZoom = currentZoom;
+      });
     }
   });
 
   deleteBtn.addEventListener('click', () => {
-    markerTurn = 0;
+    // markerTurn = 0;
     map.removeLayer(lastMarker1);
     map.removeLayer(lastMarker2);
     map.removeLayer(lastMarker3);
