@@ -245,10 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Position marker
         //// Remove marker 1 (red)
-        if (markerTurn == 0) {
-          map.removeLayer(lastMarker1);     // previous marker
-          console.log("Remove last marker 1");
-        }
+        map.removeLayer(lastMarker1);     // previous marker
         if (markerTurn != 0) {
           map.removeLayer(currentMarker1);  // current marker
         }
@@ -261,9 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
           currentMarker1 = L.marker([x1, y1], { icon: redIcon }).addTo(map);
         }
         //// Remove marker 2 (green)
-        if (markerTurn == 0) {
-          map.removeLayer(lastMarker2);     // previous marker
-        }
+        map.removeLayer(lastMarker2);     // previous marker
         if (markerTurn != 0) {
           map.removeLayer(currentMarker2);  // current marker
         }
@@ -276,9 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
           lastMarker2 = L.marker([lastLat2, lastLng2], { icon: greenIcon }).addTo(map);
         }
         //// Remove marker 3 (blue)
-        if (markerTurn == 0) {
-          map.removeLayer(lastMarker3);     // previous marker
-        }
+        map.removeLayer(lastMarker3);     // previous marker
         if (markerTurn != 0) {
           map.removeLayer(currentMarker3);  // current marker
         }
@@ -297,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   deleteBtn.addEventListener('click', () => {
-    // markerTurn = 0;
+    markerTurn = 0;
     map.removeLayer(lastMarker1);
     map.removeLayer(lastMarker2);
     map.removeLayer(lastMarker3);
