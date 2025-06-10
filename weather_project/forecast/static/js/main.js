@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMarker1 = null, currentMarker2 = null, currentMarker3 = null;
   var x1 = 0, x2 = 0, x3 = 0;
   var y1 = 0, y2 = 0, y3 = 0;
+  var markerTurn = 0;
 
   map.on('load', function () {
     ref1.on("value", (snapshot) => {
@@ -182,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   });
 
+  let firebaseMarker = null;
+  let prevFirebaseMarker = null;
   var uavIcon = new L.Icon({
     iconUrl: 'http://getdrawings.com/free-icon/uav-icon-62.png',
     iconSize: [50, 50],
@@ -189,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
-  let firebaseMarker = null;
 
   // Marker for previous position
   var prevPos = new L.Icon({
@@ -199,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
     popupAnchor: [0, -20],
     shadowSize: [41, 41]
   });
-  let prevFirebaseMarker = null;
 
   db.ref("Toa-do-hien-tai").on("value", (snapshot) => {
     const data = snapshot.val();
