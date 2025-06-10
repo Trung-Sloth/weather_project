@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('click', function (e) {
     markerTurn = markerTurn + 1;
     if (markerTurn % 3 == 1) {
+      map.removeLayer(lastMarker1);
       const lat1 = e.latlng.lat.toFixed(6);
       const lng1 = e.latlng.lng.toFixed(6);
       x1 = lat1;
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (markerTurn % 3 == 2) {
+      map.removeLayer(lastMarker2);
       const lat2 = e.latlng.lat.toFixed(6);
       const lng2 = e.latlng.lng.toFixed(6);
       x2 = lat2;
@@ -109,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (markerTurn % 3 == 0) {
+      map.removeLayer(lastMarker3);
       const lat3 = e.latlng.lat.toFixed(6);
       const lng3 = e.latlng.lng.toFixed(6);
       x3 = lat3;
@@ -244,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //// Remove marker 1 (red)
         if (markerTurn == 0) {
           map.removeLayer(lastMarker1);     // previous marker
+          console.log("Remove last marker 1");
         }
         if (markerTurn != 0) {
           map.removeLayer(currentMarker1);  // current marker
