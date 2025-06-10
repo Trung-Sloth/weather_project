@@ -20,25 +20,26 @@ document.addEventListener('DOMContentLoaded', () => {
   var x1 = 0, x2 = 0, x3 = 0;
   var y1 = 0, y2 = 0, y3 = 0;
   var markerTurn = 0;
+  let lastMarker1 = null, lastMarker2 = null, lastMarker3 = null;
 
   map.on('load', function () {
     ref1.on("value", (snapshot) => {
       lastLat1 = parseFloat(snapshot.val().lat);
       lastLng1 = parseFloat(snapshot.val().lng);
-      console.log("Toa-do-1: " + lastLat1 + ", " + lastLng1);
+      // console.log("Toa-do-1: " + lastLat1 + ", " + lastLng1);
       lastMarker1 = L.marker([lastLat1, lastLng1], { icon: redIcon }).addTo(map);
       console.log("Map loaded");
     });
     ref2.on("value", (snapshot) => {
       lastLat2 = parseFloat(snapshot.val().lat);
       lastLng2 = parseFloat(snapshot.val().lng);
-      console.log("Toa-do-2: " + lastLat2 + ", " + lastLng2);
+      // console.log("Toa-do-2: " + lastLat2 + ", " + lastLng2);
       lastMarker2 = L.marker([lastLat2, lastLng2], { icon: greenIcon }).addTo(map);
     });
     ref3.on("value", (snapshot) => {
       lastLat3 = parseFloat(snapshot.val().lat);
       lastLng3 = parseFloat(snapshot.val().lng);
-      console.log("Toa-do-3: " + lastLat3 + ", " + lastLng3);
+      // console.log("Toa-do-3: " + lastLat3 + ", " + lastLng3);
       lastMarker3 = L.marker([lastLat3, lastLng3], { icon: blueIcon }).addTo(map);
     });
   });
