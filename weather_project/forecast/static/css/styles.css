@@ -398,6 +398,7 @@ main.clear {
     opacity: 0.5;
 }
 
+
 #map-pin {
     display: none;
     position: fixed;
