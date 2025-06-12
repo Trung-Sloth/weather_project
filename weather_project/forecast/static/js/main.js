@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var y1 = 0, y2 = 0, y3 = 0;
   var markerTurn = 0;
   let lastMarker1 = null, lastMarker2 = null, lastMarker3 = null;
-  var takeOff;
+  var takeOff = 0;
 
   map.on('load', function () {
     ref1.on("value", (snapshot) => {
@@ -136,13 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = snapshot.val();
     if (data && data.n) {
       const status = data.n;
-      if (status == 1) {  // Status 1: Not flying
+      if (status == 1) {  // Status 1: Not ready to flying
 
       }
       if (status == 2) { // Status 2: Ready to take off
         var informBoard;
         informBoard = Toastify({
-          text: "Click to take off",
+          text: "Click here to take off",
           className: "info",
           duration: -1,
           newWindow: true,
@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (status == 10) { // Status 10: Reached point 1
         Toastify({
-          text: "Reached point 1",
-          duration: 2000,
+          text: "UAV has reached point 1",
+          duration: 3000,
           newWindow: true,
           close: true,
           gravity: "top",
@@ -182,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (status == 20) { // Status 20: Reached point 2
         Toastify({
-          text: "Reached point 2",
-          duration: 2000,
+          text: "UAV has reached point 2",
+          duration: 3000,
           newWindow: true,
           close: true,
           gravity: "top",
@@ -196,8 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (status == 30) { // Status 30: Reached point 3
         Toastify({
-          text: "Reached point 3",
-          duration: 2000,
+          text: " UAV has reached point 3",
+          duration: 3000,
           newWindow: true,
           close: true,
           gravity: "top",
@@ -205,6 +205,20 @@ document.addEventListener('DOMContentLoaded', () => {
           stopOnFocus: true,
           style: {
             background: "linear-gradient(to right,rgb(65, 150, 210))",
+          },
+        }).showToast();
+      }
+      if (status == 40) { // Status 40: Reached home
+        Toastify({
+          text: "UAV has been to home",
+          duration: 3000,
+          newWindow: true,
+          close: true,
+          gravity: "top",
+          position: "middle",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right,rgb(228, 10, 134))",
           },
         }).showToast();
       }
@@ -258,14 +272,17 @@ document.addEventListener('DOMContentLoaded', () => {
     db.ref("Toa-do-1").set({
       lat: parseFloat(x1),
       lng: parseFloat(y1),
+      takeOff: takeOff,
     })
     db.ref("Toa-do-2").set({
       lat: parseFloat(x2),
       lng: parseFloat(y2),
+      takeOff: takeOff,
     })
     db.ref("Toa-do-3").set({
       lat: parseFloat(x3),
       lng: parseFloat(y3),
+      takeOff: takeOff,
     })
   });
 
