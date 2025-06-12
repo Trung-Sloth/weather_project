@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
             informBoard.hideToast();
             }, 1000);
+            map.removeLayer(lastMarker3)
             db.ref("Toa-do-3").set({
               lat: parseFloat(x3),
               lng: parseFloat(y3),
