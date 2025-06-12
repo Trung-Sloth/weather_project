@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //// Inform status of UAV
   db.ref("Toa-do-hien-tai").on("value", (snapshot) => {
     const data = snapshot.val();
+    const lat = data.lat_cur;
+    const lng = data.lng_cur;
     if (data && data.n) {
       const status = data.n;
       if (status == 1) {  // Status 1: Not ready to flying
@@ -164,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
               lng: parseFloat(y3),
               takeOff: takeOff
             });
+            db.ref("Toa-do-hien-tai").set({
+              lat_cur: lat,
+              lng_cur: lng,
+              n      : 3,
+            })
           }
         }).showToast();
       }
