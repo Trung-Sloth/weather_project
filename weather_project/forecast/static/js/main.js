@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var y1 = 0, y2 = 0, y3 = 0;
   var markerTurn = 0;
   let lastMarker1 = null, lastMarker2 = null, lastMarker3 = null;
+  var takeOff;
 
   map.on('load', function () {
     ref1.on("value", (snapshot) => {
@@ -128,6 +129,87 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapDiv = document.getElementById('map');
   const confirmBtn = document.getElementById('confirmBtn');
   const deleteBtn = document.getElementById('deleteBtn');
+
+  // Inform board
+  //// Inform status of UAV
+  db.ref("Toa-do-hien-tai").on("value", (snapshot) => {
+    const data = snapshot.val();
+    if (data && data.n) {
+      const status = data.n;
+      if (status == 1) {  // Status 1: Not flying
+
+      }
+      if (status == 2) { // Status 2: Ready to take off
+        var informBoard;
+        informBoard = Toastify({
+          text: "Click to take off",
+          className: "info",
+          duration: -1,
+          newWindow: true,
+          close: true,
+          gravity: "top",
+          position: "middle",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+          },
+          onClick: function () {
+            takeOff = 1;
+            setTimeout(() => {
+            informBoard.hideToast();
+            }, 1000);
+            db.ref("Toa-do-3").set({
+              lat: parseFloat(x3),
+              lng: parseFloat(y3),
+              takeOff: takeOff
+            });
+          }
+        }).showToast();
+      }
+      if (status == 10) { // Status 10: Reached point 1
+        Toastify({
+          text: "Reached point 1",
+          duration: 2000,
+          newWindow: true,
+          close: true,
+          gravity: "top",
+          position: "middle",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right,rgb(176, 18, 0))",
+          },
+        }).showToast();
+      }
+      if (status == 20) { // Status 20: Reached point 2
+        Toastify({
+          text: "Reached point 2",
+          duration: 2000,
+          newWindow: true,
+          close: true,
+          gravity: "top",
+          position: "middle",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right,rgb(0, 176, 50))",
+          },
+        }).showToast();
+      }
+      if (status == 30) { // Status 30: Reached point 3
+        Toastify({
+          text: "Reached point 3",
+          duration: 2000,
+          newWindow: true,
+          close: true,
+          gravity: "top",
+          position: "middle",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right,rgb(65, 150, 210))",
+          },
+        }).showToast();
+      }
+    }
+  });
 
   toggleBtn.addEventListener('click', () => {
     if (confirmBtn.style.display == 'none') {

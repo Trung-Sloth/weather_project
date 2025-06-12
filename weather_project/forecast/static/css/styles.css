@@ -444,3 +444,11 @@ main.clear {
 #pin-color-blue {
     background-image: url('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png');
 }
+
+.info:hover {
+    filter: invert(0.8);
+}
+
+.info:active {
+    filter: opacity(0.5);
+}
